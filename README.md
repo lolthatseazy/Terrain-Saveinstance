@@ -1,3 +1,4 @@
+# LIST OF WORKING GETHIDDENPROPERTY EXEC: FLUXUS,SWIFT
 # PLEASE DONT USE https://github.com/luau/UniversalSynSaveInstance
 
 # Loadstring
