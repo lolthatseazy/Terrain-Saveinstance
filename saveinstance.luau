@@ -2,7 +2,7 @@
 --!optimize 2
 --!divine-intellect
 -- https://discord.gg/wx4ThpAsmw
-
+-- if it works, it works -- Ally Carter and Franklin D. Roosevelt
 function to_base64(data)
 	local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 	return ((data:gsub('.', function(x) 
