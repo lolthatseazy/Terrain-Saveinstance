@@ -3,10 +3,10 @@
 --!divine-intellect
 -- https://discord.gg/wx4ThpAsmw
 -- if it works, it works -- Ally Carter and Franklin D. Roosevelt
-local exec = identifyexecutor()
+--[[local exec = identifyexecutor()
 if not (string.find(exec, "Fluxus") or string.find(exec, "Swift")) then
     return
-end
+end]]
 
 function to_base64(data)
 	local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
