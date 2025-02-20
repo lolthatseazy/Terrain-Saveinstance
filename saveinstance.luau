@@ -2423,7 +2423,7 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 		if className == "Terrain" then
 			writefile("SmoothGrid.txt", gethiddenpropertygethiddenproperty(workspace.Terrain, "SmoothGrid"))
 			writefile("PhysicsGrid.txt", gethiddenpropertygethiddenproperty(workspace.Terrain, "PhysicsGrid"))
-			task.wait(3)
+			--task.wait(3)
 			local physicsgrid = to_base64(readfile("PhysicsGrid.txt"))
 			local smoothgrid = to_base64(readfile("SmoothGrid.txt"))
 			itemstring = itemstring ..
