@@ -1873,7 +1873,7 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 		local DecompileIgnore = OPTIONS.DecompileIgnore
 
 		local Path = service.StarterPlayer:FindFirstChild("StarterPlayerScripts")
-		local Exclude = { ModuleScript = { "PlayerModule" }, LocalScript = { "RbxCharacterSounds" } }
+		--local Exclude = { ModuleScript = { "PlayerModule" }, LocalScript = { "RbxCharacterSounds" } }
 		if Path then
 			for _, className in Exclude do
 				for _, name in className do
