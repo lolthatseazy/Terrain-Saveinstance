@@ -2,6 +2,11 @@
 --!optimize 2
 --!divine-intellect
 -- https://discord.gg/wx4ThpAsmw
+-- if it works, it works -- Ally Carter and Franklin D. Roosevelt
+--[[local exec = identifyexecutor()
+if not (string.find(exec, "Fluxus") or string.find(exec, "Swift")) then
+    return
+end]]
 
 function to_base64(data)
 	local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
@@ -19,23 +24,11 @@ end
 
 getgenv().gethiddenpropertygethiddenproperty = gethiddenproperty -- funny haha
 
--- optimize adapt overcome
-local game = game
-local pcall = pcall
-local workspace = workspace
-local setmetatable = setmetatable
-local bit32 = bit32
-local buffer = buffer
-local Instance = Instance
-local assert = assert
-local table = table
-local string = string
-
 local function string_find(s, pattern)
 	return string.find(s, pattern, nil, true)
 end
 
-local function ArrayToDict(t, hydridMode, valueOverride, typeStrict)
+local function ArrayToDictionary(t, hydridMode, valueOverride, typeStrict)
 	local tmp = {}
 
 	if hydridMode then
@@ -43,7 +36,7 @@ local function ArrayToDict(t, hydridMode, valueOverride, typeStrict)
 			if type(some1) == "number" then
 				tmp[some2] = valueOverride or true
 			elseif type(some2) == "table" then
-				tmp[some1] = ArrayToDict(some2, hydridMode) -- Some1 is Class, Some2 is Name
+				tmp[some1] = ArrayToDictionary(some2, hydridMode) -- Some1 is Class, Some2 is Name
 			else
 				tmp[some1] = some2
 			end
@@ -101,7 +94,6 @@ local getscriptbytecode = global_container.getscriptbytecode -- * A lot of assum
 local base64encode = global_container.base64encode
 local sha384
 
-
 local service = setmetatable({}, {
 	__index = function(self, serviceName)
 		local o, s = pcall(Instance.new, serviceName)
@@ -124,7 +116,7 @@ do -- * Load Region of Déjà Vu
 	local UGCValidationService = service.UGCValidationService
 
 	gethiddenproperty_fallback = function(instance, propertyName)
-		return UGCValidationService:GetPropertyValue(instance, propertyName) -- TODO Sadly there's no way to tell whether value is actually nil or the function just couldn't read it (always returns nil for "Class" category properties)
+		return gethiddenpropertygethiddenproperty(instance, propertyName) -- TODO Sadly there's no way to tell whether value is actually nil or the function just couldn't read it (always returns nil for "Class" category properties)
 		-- TODO `category ~= "Class"` causes WeldConstraint Part1Internal to be read as nil and not get unfiltered. Currently, there are no properties of category "Class" that match the following: NotScriptable, can be read with gethiddenproperty_fallback accurately (it always outputs nil for "Class" category, making that check useless anyway) & don't have a NotScriptableFix.
 	end
 	if gethiddenproperty then
@@ -290,7 +282,7 @@ end
 
 local CLIENT_VERSION = tonumber(string.split(version(), ".")[2])
 
-local attr_Type_IDs = {
+local Type_IDs = {
 	string = 0x02,
 	boolean = 0x03,
 	-- int32 = 0x04,
@@ -794,12 +786,12 @@ XML_Descriptors = {
 	end,
 	Color3uint8 = function(raw)
 		-- https://github.com/rojo-rbx/rbx-dom/blob/master/docs/xml.md#color3uint8
-		-- ? It is recommended that Color3uint8 is encoded with text instead of elements.
 
 		return 0xFF000000
 			+ (math.floor(raw.R * 255) * 0x10000)
 			+ (math.floor(raw.G * 255) * 0x100)
-			+ math.floor(raw.B * 255)
+			+ math.floor(raw.B * 255) -- ? It is recommended that Color3uint8 is encoded with text instead of elements.
+
 		-- return bit32.bor(
 		-- 	bit32.bor(bit32.bor(bit32.lshift(0xFF, 24), bit32.lshift(0xFF * raw.R, 16)), bit32.lshift(0xFF * raw.G, 8)),
 		-- 	0xFF * raw.B
@@ -869,7 +861,7 @@ XML_Descriptors = {
 		-- The value is the text content, formatted as a space-separated list of floating point numbers.
 		local __EXTREME_RANGE = XML_Descriptors.__EXTREME_RANGE
 
-		return __EXTREME_RANGE(raw.Min) .. " " .. __EXTREME_RANGE(raw.Max) --[[.. " "]] -- ! This might be required for compatibility; __EXTREME_RANGE is not needed here but it fixes the issue where "nan 10" value would reset to "0 0"
+		return __EXTREME_RANGE(raw.Min) .. " " .. __EXTREME_RANGE(raw.Max) --[[.. " "]] -- ! This might be required to bypass detections as thats how its formatted usually; __EXTREME_RANGE is not needed here but it fixes the issue where "nan 10" value would reset to "0 0"
 	end,
 	NumberSequence = nil,
 	-- NumberSequence = Descriptors.__SEQUENCE,
@@ -1090,10 +1082,10 @@ local ClassList
 
 do
 	local ClassPropertyExceptions = {
-		Whitelist = { TriangleMeshPart = ArrayToDict({ "CollisionFidelity" }) },
+		Whitelist = { TriangleMeshPart = ArrayToDictionary({ "CollisionFidelity" }) },
 		Blacklist = {
-			LuaSourceContainer = ArrayToDict({ "ScriptGuid" }),
-			Instance = ArrayToDict({ "UniqueId", "HistoryId" }),
+			LuaSourceContainer = ArrayToDictionary({ "ScriptGuid" }),
+			Instance = ArrayToDictionary({ "UniqueId", "HistoryId" }),
 		},
 	}
 
@@ -1152,7 +1144,7 @@ do
 					buffer.copy(b, offset, b_Name)
 					offset += Name_size
 
-					buffer.writeu8(b, offset, attr_Type_IDs[typeof(attrs[attr])])
+					buffer.writeu8(b, offset, Type_IDs[typeof(attrs[attr])])
 					offset += 1
 
 					local bb = attrs_formatted[attr]
@@ -1279,6 +1271,7 @@ do
 				return instance:GetScale()
 			end,
 			WorldPivotData = "WorldPivot", -- TODO This doesn't accurately represent whether optional type property is present or not (it's never nil), gethiddenproperty or gethiddenproperty_fallback is preferred
+			-- ModelMeshCFrame = "Pivot Offset",  -- * Both are NotScriptable
 		},
 		PackageLink = { PackageIdSerialize = "PackageId", VersionIdSerialize = "VersionNumber" },
 		Players = { MaxPlayersInternal = "MaxPlayers", PreferredPlayersInternal = "PreferredPlayers" }, -- ? Only needed for execs that lack LocalUserSecurity (Level 2, 5, 9), even so, it's a pretty useless information as it can be viewed elsewhere
@@ -1365,12 +1358,7 @@ do
 		local ok, err = pcall(function()
 			local CLIENT_VERSION_str = tostring(CLIENT_VERSION)
 			local ok, result = pcall(readfile, CLIENT_VERSION_str)
-			if
-				ok
-				and result
-				and result ~= ""
-				and pcall(service.HttpService.JSONDecode, service.HttpService, result)
-			then
+			if ok and result and result ~= "" then
 				API_Dump = result
 				return
 			end
@@ -1444,7 +1432,7 @@ do
 			local ClassName = API_Class.Name
 
 			if ClassTags then
-				Class.Tags = ArrayToDict(ClassTags, nil, nil, "string") -- or {}
+				Class.Tags = ArrayToDictionary(ClassTags, nil, nil, "string") -- or {}
 			end
 
 			local NotScriptableFixClass = NotScriptableFixes[ClassName]
@@ -1475,7 +1463,7 @@ do
 							local ValueType = Member.ValueType
 							local ValueType_Name = ValueType.Name
 
-							if 645 <= CLIENT_VERSION and ValueType_Name == "Content" then -- TODO: Remove after Roblox adds a descriptor for it
+							if 649 <= CLIENT_VERSION and ValueType_Name == "Content" then -- TODO: Remove after Roblox adds a descriptor for it
 								continue
 							end
 
@@ -1575,7 +1563,7 @@ local GLOBAL_ENV = getgenv and getgenv() or _G or shared
 
 --- @interface CustomOptions table
 --- * Structure of the main CustomOptions table.
---- * Note: Options are case-insensitive, meaning you could type `NilInstances` option as `nilInStaNces` and it would still be valid.
+--- * Note: Aliases take priority over parent option name.
 --- @within SynSaveInstance
 --- @field __DEBUG_MODE boolean -- Recommended to enable if you wish to help us improve our products and find bugs / issues with it! ___Default:___ false
 --- @field ReadMe boolean --___Default:___ true
@@ -1585,7 +1573,7 @@ local GLOBAL_ENV = getgenv and getgenv() or _G or shared
 --- Anonymous {boolean|table{UserId = string, Name = string}} -- * **RISKY:** Cleans the file of any info related to your account like: Name, UserId. This is useful for some games that might store that info in GUIs or other Instances. Might potentially mess up parts of strings that contain characters that match your Name or parts of numbers that match your UserId. Can also be a table with UserId & Name keys. ___Default:___ false
 --- @field ShowStatus boolean -- ___Default:___ true
 --- @field Callback boolean -- If set, the serialized data will be sent to the callback function instead of to file. ___Default:___ nil
---- @field mode string -- Valid modes: full, optimized, scripts. Change this to invalid mode like "invalid" if you only want ExtraInstances. "optimized" mode is **NOT** supported with *@Object* option. ___Default:___ `"optimized"`
+--- @field mode string -- Change this to invalid mode like "invalid" if you only want ExtraInstances. "optimized" mode is **NOT** supported with *@Object* option. ___Default:___ `"optimized"`
 --- @field noscripts boolean -- ___Aliases:___ `Decompile`. ___Default:___ false
 --- @field scriptcache boolean -- ___Default:___ true
 --- @field decomptype string -- * "custom" - for built-in custom decompiler. ___Default:___ Your executor's decompiler, if available. Otherwise uses "custom" if not.
@@ -1665,9 +1653,10 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 	end
 
 	local currentstr, currentsize, totalsize, chunks = "", 0, 0, table.create(1)
-	local savebuffer, savebuffer_size = {}, 1
-	local header =
-		'<!-- Saved by UniversalSynSaveInstance (Join to Copy Games) https://discord.gg/wx4ThpAsmw --><roblox version="4">'
+	local savebuffer, savebuffer_size =
+		{
+			'<!-- Saved by UniversalSynSaveInstance (Join to Copy Games) https://discord.gg/wx4ThpAsmw --><roblox version="4">',
+		}, 2
 
 	local StatusText
 
@@ -1717,7 +1706,7 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 		IgnoreDefaultProperties = true,
 		IgnoreNotArchivable = true,
 		IgnorePropertiesOfNotScriptsOnScriptsMode = false,
-		IgnoreSpecialProperties = ArrayToDict({ "Fluxus", "Delta", "Solara" })[EXECUTOR_NAME] or false, -- ! Please submit more Executors that crash on gethiddenproperty (with this disabled basically)
+		IgnoreSpecialProperties = ArrayToDictionary({ "Fluxus", "Delta", "Solara" })[EXECUTOR_NAME] or false, -- ! Please submit more Executors that crash on gethiddenproperty (with this disabled basically)
 
 		IsolateLocalPlayer = false, --  #service.StarterGui:GetChildren() == 0
 		IsolateLocalPlayerCharacter = false,
@@ -1749,7 +1738,7 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 		IgnoreSharedStrings = EXECUTOR_NAME ~= "Wave" and true,
 		SharedStringOverwrite = false,
 		TreatUnionsAsParts = EXECUTOR_NAME == "Solara", -- TODO Temporary true (once removed, remove Note from docs too)
-		AlternativeWritefile = not ArrayToDict({ "WRD", "Xeno", "Zorara" })[EXECUTOR_NAME],
+		AlternativeWritefile = not ArrayToDictionary({ "WRD", "Xeno", "Zorara" })[EXECUTOR_NAME],
 
 		OptionsAliases = { -- You can't really modify these as a user
 			DecompileTimeout = "timeout",
@@ -1900,10 +1889,10 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 	local InstancesOverrides = {}
 
 	local DecompileIgnore, IgnoreList, IgnoreProperties, NotCreatableFixes =
-		ArrayToDict(OPTIONS.DecompileIgnore, true),
-	ArrayToDict(OPTIONS.IgnoreList, true),
-	ArrayToDict(OPTIONS.IgnoreProperties),
-	ArrayToDict(OPTIONS.NotCreatableFixes, true, "Folder")
+		ArrayToDictionary(OPTIONS.DecompileIgnore, true),
+	ArrayToDictionary(OPTIONS.IgnoreList, true),
+	ArrayToDictionary(OPTIONS.IgnoreProperties),
+	ArrayToDictionary(OPTIONS.NotCreatableFixes, true, "Folder")
 
 	local __DEBUG_MODE = OPTIONS.__DEBUG_MODE
 
@@ -2027,7 +2016,7 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 			if not ToSaveInstance then
 				local Children = TempRoot:GetChildren()
 				if 0 < #Children then
-					local tmp_dict = ArrayToDict(tmp)
+					local tmp_dict = ArrayToDictionary(tmp)
 					for _, child in Children do
 						if not tmp_dict[child] then
 							table.insert(tmp, child)
@@ -2039,7 +2028,7 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 			-- if IsolatePlayers then
 			-- 	table.insert(_list_0, "Players")
 			-- end
-			local tmp_dict = ArrayToDict(tmp)
+			local tmp_dict = ArrayToDictionary(tmp)
 
 			for _, serviceName in
 				{
@@ -2058,13 +2047,13 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 					"StarterPlayer",
 					"Teams",
 					"SoundService",
-					"Chat",
 					"TextChatService",
+					"Chat",
 
-					"LocalizationService", -- For LocalizationTables
 					-- "InsertService",
 					"JointsService",
 
+					"LocalizationService", -- For LocalizationTables
 					-- "TestService",
 					-- "VoiceChatService",
 				}
@@ -2188,9 +2177,11 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 	end
 
 	local function construct_TimeoutHandler(timeout, f, timeout_ret)
-		return timeout < 0 and function(script)
-			return pcall(f, script)
-		end or function(script) -- TODO Ideally use ... (vararg) instead of `script` in case this is reused for something other than `decompile` & `getscriptbytecode`
+		return function(script) -- TODO Ideally use ... (vararg) instead of `script` in case this is reused for something other than `decompile` & `getscriptbytecode`
+			if timeout < 0 then
+				return pcall(f, script)
+			end
+
 			local thread = coroutine.running()
 			local timeoutThread, isCancelled
 
@@ -2901,18 +2892,17 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 	end
 
 	local function save_game()
-		do
-			if IsModel then
-				--[[ 
+		writefile(placename, "")
+
+		if IsModel then
+			savebuffer[savebuffer_size] = '<Meta name="ExplicitAutoJoints">true</Meta>'
+			savebuffer_size += 1
+		end
+		--[[
 			-- ? Roblox encodes the following additional attributes. These are not required. Moreover, any defined schemas are ignored, and not required for a file to be valid: xmlns:xmime="http://www.w3.org/2005/05/xmlmime" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.roblox.com/roblox.xsd"  
-			Also http can be converted to https but not sure if Roblox cares
+			Also http can be converted to https but not sure if Roblox would decide to detect that
 			-- ? <External>null</External><External>nil</External>  - <External> is a legacy concept that is no longer used.
 		]]
-				header ..= '<Meta name="ExplicitAutoJoints">true</Meta>'
-			end
-
-			writefile(placename, header) -- TODO This is sort of useless if writefile will be used at the end (like if AlternativeWritefile and Callback are unused)
-		end
 
 		-- TODO Find a better solution for this
 		SaveNotCreatableWillBeEnabled = SaveNotCreatable
@@ -3029,7 +3019,7 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 		Or Destroy the Camera.
 
 		This file was generated with the following settings:
-		]]
+				]]
 					.. service.HttpService:JSONEncode(OPTIONS)
 					.. "\n\n\t\tElapsed time: "
 					.. os.clock() - elapse_t
@@ -3037,8 +3027,6 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 					.. game.PlaceId
 					.. " PlaceVersion: "
 					.. game.PlaceVersion
-					.. " Client Version: "
-					.. version()
 					.. " Executor: "
 					.. (identify_executor and table.concat({ identify_executor() }, " ") or "Unknown")
 					.. "\n]]"
@@ -3148,45 +3136,10 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 					end
 				end
 			else
-				local totalstr = header
-				local s1 = ""
-				local s2 = ""
-				local s3 = ""
-				local s4 = ""
-				local c1 = table.move(chunks, 1, #chunks/4, 1, {})
-				local c2 = table.move(chunks, #chunks/4, #chunks/2, 1, {})
-				local c3 = table.move(chunks, #chunks/2, (#chunks/2) + #chunks/4, 1, {})
-				local c4 = table.move(chunks, (#chunks/2) + #chunks/4, #chunks, 1, {})
-				local yield = true
-				local yield2 = true
-				local yield3 = true
-				local yield4 = true
-				task.spawn(function()
-					for _, chunk in c1 do
-						s1 ..= chunk.str
-					end
-					yield = false
-				end)
-				task.spawn(function()
-					for _, chunk in c2 do
-						s2 ..= chunk.str
-					end
-					yield2 = false
-				end) 
-				task.spawn(function()
-					for _, chunk in c3 do
-						s3 ..= chunk.str
-					end
-					yield3 = false
-				end)
-				task.spawn(function()
-					for _, chunk in c4 do
-						s4 ..= chunk.str
-					end
-					yield4 = false
-				end) 
-				repeat task.wait() until yield == false and yield2 == false and yield3 == false and yield4 == false
-				totalstr ..= s1 .. s2 .. s3 .. s4
+				local totalstr = ""
+				for _, chunk in chunks do
+					totalstr ..= chunk.str
+				end
 				run_with_loading(
 					"Writing " .. get_size_format() .. " to File (Depends on Exec)",
 					nil,
