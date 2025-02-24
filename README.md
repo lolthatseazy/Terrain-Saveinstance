@@ -8,6 +8,11 @@ local synsaveinstance = loadstring(game:HttpGet("https://raw.githubusercontent.c
 synsaveinstance({})
 ```
 
+```lua
+local synsaveinstance = loadstring(game:HttpGet("https://raw.githubusercontent.com/playvoras/UniversalSynSaveInstance/refs/heads/main/optimized.lua", true))()
+synsaveinstance({})
+```
+
 
 
 # 💖 Support Us & Our Work
