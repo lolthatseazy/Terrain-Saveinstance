@@ -8,33 +8,18 @@ if not (string.find(exec, "Fluxus") or string.find(exec, "Swift")) then
     return
 end]]
 
-
-local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-local table = table
-local string = string
-local math = math
 local function to_base64(data)
-	local result, bit_table = {}, {}
-	for i = 1, #data do
-		local byte = data:byte(i)
-		local bits = {}
-		for j = 7, 0, -1 do
-			bits[#bits + 1] = (math.floor(byte / (2 ^ j)) % 2 == 1) and '1' or '0'
-		end
-		bit_table[#bit_table + 1] = table.concat(bits)
-	end
-
-	local bit_string = table.concat(bit_table)
-	bit_string = bit_string .. string.rep('0', (6 - #bit_string % 6) % 6)
-
-	for i = 1, #bit_string, 6 do
-		local chunk = bit_string:sub(i, i + 5)
-		local index = tonumber(chunk, 2) + 1
-		result[#result + 1] = b:sub(index, index)
-	end
-
-	local padding = (#data % 3 == 1 and '==') or (#data % 3 == 2 and '=' or '')
-	return table.concat(result) .. padding
+	local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+	return ((data:gsub('.', function(x) 
+		local r,b='',x:byte()
+		for i=8,1,-1 do r=r..(b%2^i-b%2^(i-1)>0 and '1' or '0') end
+		return r;
+	end)..'0000'):gsub('%d%d%d?%d?%d?%d?', function(x)
+		if (#x < 6) then return '' end
+		local c=0
+		for i=1,6 do c=c+(x:sub(i,i)=='1' and 2^(6-i) or 0) end
+		return b:sub(c+1,c+1)
+	end)..({ '', '==', '=' })[#data%3+1])
 end
 
 getgenv().gethiddenpropertygethiddenproperty = gethiddenproperty -- funny haha
@@ -131,7 +116,7 @@ do -- * Load Region of Déjà Vu
 	local UGCValidationService = service.UGCValidationService
 
 	gethiddenproperty_fallback = function(instance, propertyName)
-		return UGCValidationService:GetPropertyValue(instance, propertyName) -- TODO Sadly there's no way to tell whether value is actually nil or the function just couldn't read it (always returns nil for "Class" category properties)
+		return gethiddenpropertygethiddenproperty(instance, propertyName) -- TODO Sadly there's no way to tell whether value is actually nil or the function just couldn't read it (always returns nil for "Class" category properties)
 		-- TODO `category ~= "Class"` causes WeldConstraint Part1Internal to be read as nil and not get unfiltered. Currently, there are no properties of category "Class" that match the following: NotScriptable, can be read with gethiddenproperty_fallback accurately (it always outputs nil for "Class" category, making that check useless anyway) & don't have a NotScriptableFix.
 	end
 	if gethiddenproperty then
