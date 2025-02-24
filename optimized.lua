@@ -3,6 +3,9 @@
 --!divine-intellect
 -- https://discord.gg/wx4ThpAsmw
 
+local realcheck = true
+if string.find(identifyexecutor(), "Solara") then realcheck = false end
+
 local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 local table = table
 local string = string
@@ -2443,7 +2446,7 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 		end
 
 		local itemstring = '<Item class="' .. className .. '" referent="' .. ref .. '"><Properties>'
-		if className == "Terrain" then
+		if className == "Terrain" and realcheck then
 			writefile("SmoothGrid.txt", gethiddenpropertygethiddenproperty(workspace.Terrain, "SmoothGrid"))
 			task.wait()
 			writefile("PhysicsGrid.txt", gethiddenpropertygethiddenproperty(workspace.Terrain, "PhysicsGrid"))
