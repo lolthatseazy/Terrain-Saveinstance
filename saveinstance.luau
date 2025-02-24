@@ -13,6 +13,7 @@ local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 local table = table
 local string = string
 local math = math
+local tonumber = tonumber
 local function to_base64(data)
 	local result, bit_table = {}, {}
 	for i = 1, #data do
