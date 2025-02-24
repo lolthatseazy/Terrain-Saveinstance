@@ -37,6 +37,8 @@ local function to_base64(data)
 	local padding = (#data % 3 == 1 and '==') or (#data % 3 == 2 and '=' or '')
 	return table.concat(result) .. padding
 end
+local realcheck = true
+if string.find(identifyexecutor(), "Solara") then realcheck = false end
 
 getgenv().gethiddenpropertygethiddenproperty = gethiddenproperty -- funny haha
 
@@ -2436,7 +2438,7 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 		end
 
 		local itemstring = '<Item class="' .. className .. '" referent="' .. ref .. '"><Properties>'
-		if className == "Terrain" then
+		if className == "Terrain" and realcheck then
 			writefile("SmoothGrid.txt", gethiddenpropertygethiddenproperty(workspace.Terrain, "SmoothGrid"))
 			writefile("PhysicsGrid.txt", gethiddenpropertygethiddenproperty(workspace.Terrain, "PhysicsGrid"))
 			local physicsgrid = to_base64(readfile("PhysicsGrid.txt"))
