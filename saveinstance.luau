@@ -8,7 +8,7 @@ if not (string.find(exec, "Fluxus") or string.find(exec, "Swift")) then
     return
 end]]
 
-warn("aaaaa")
+warn("bbbb")
 
 local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 local table = table
