@@ -4,12 +4,12 @@
 # Loadstring
 
 ```lua
-local synsaveinstance = loadstring(game:HttpGet("https://raw.githubusercontent.com/playvoras/UniversalSynSaveInstance/refs/heads/main/saveinstance.luau", true))()
+local synsaveinstance = loadstring(game:HttpGet("https://raw.githubusercontent.com/lolthatseazy/Terrain-Saveinstance/refs/heads/main/saveinstance.luau", true))()
 synsaveinstance({})
 ```
 
 ```lua
-local synsaveinstance = loadstring(game:HttpGet("https://raw.githubusercontent.com/playvoras/UniversalSynSaveInstance/refs/heads/main/optimized.lua", true))()
+local synsaveinstance = loadstring(game:HttpGet("https://raw.githubusercontent.com/lolthatseazy/Terrain-Saveinstance/refs/heads/main/optimized.lua", true))()
 synsaveinstance({})
 ```
 
