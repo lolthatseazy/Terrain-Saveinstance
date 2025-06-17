@@ -1671,7 +1671,9 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 	end
 
 	local currentstr, currentsize, totalsize, chunks = "", 0, 0, table.create(1)
-	local savebuffer, savebuffer_size = {}, 0
+	local savebuffer, savebuffer_size = {
+		'<roblox version="4">',
+	}, 1
 
 	local StatusText
 
