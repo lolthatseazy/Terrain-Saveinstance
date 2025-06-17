@@ -1,5 +1,5 @@
-# LIST OF WORKING GETHIDDENPROPERTY EXEC: FLUXUS,SWIFT
-# PLEASE DONT USE https://github.com/luau/UniversalSynSaveInstance
+# THIS IS A COPY OF playvoras/UniversalSynSaveInstance JUST INCASE ORIGINAL GETS DELETED
+
 
 # Loadstring
 
@@ -15,7 +15,7 @@ synsaveinstance({})
 
 
 
-# 💖 Support Us & Our Work
+# 💖 Support Their Work
 
 <a href='https://ko-fi.com/M4M1JNH5G' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' title='KO-FI' /></a>
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M1JNH5G "KO-FI")
@@ -27,4 +27,4 @@ synsaveinstance({})
 <https://discord.com/invite/wx4ThpAsmw> **/** <https://discord.gg/wx4ThpAsmw><br />
 [<img src="https://discordapp.com/api/guilds/1022465460517740654/widget.png?style=banner2" alt="Our Official Discord Server!"></img>](https://discord.com/invite/wx4ThpAsmw)<br />
 
-# https://playvora.vercel.app/saveinstancewithterrain.lua Backup IDK why
+# https://playvora.vercel.app/saveinstancewithterrain.lua Backup 2
