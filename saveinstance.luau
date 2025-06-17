@@ -8,7 +8,7 @@ if not (string.find(exec, "Fluxus") or string.find(exec, "Swift")) then
     return
 end]]
 
-warn("Update")
+warn("Updatedr3")
 
 local b = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
 local table = table
@@ -1672,9 +1672,12 @@ local function synsaveinstance(CustomOptions, CustomOptions2)
 	end
 
 	local currentstr, currentsize, totalsize, chunks = "", 0, 0, table.create(1)
-	local savebuffer, savebuffer_size = {
+	local savebuffer = {
 		'<roblox version="4">',
-	}, 1
+		'</roblox>',
+	}
+	local savebuffer_size = 2
+
 
 	local StatusText
 
